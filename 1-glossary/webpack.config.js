@@ -1,5 +1,6 @@
 require("dotenv").config();
 const path = require("path");
+const HtmlWebpackPlugin =
 
 /*
   What should go here?  Great question!
@@ -10,6 +11,8 @@ const path = require("path");
   Use this config to copy production versions of your
   index.html and styles.css to dist folder upon build
 */
+
+// PROBABLY NEED TO DO SOMETHING WITH FILE LOADER HERE!
 
 module.exports = {
   mode: 'development',
