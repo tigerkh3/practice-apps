@@ -12,4 +12,24 @@ const path = require("path");
   index.html and styles.css to dist folder upon build
 */
 
-module.exports = {};
+module.exports = {
+  mode: 'development',
+  entry: './client/src/index.jsx',
+  output: {
+    path: path.resolve(__dirname, './client/dist'),
+    filename: 'bundle.js'
+  },
+  rules: [
+    {
+      test: /\.m?jsx$/,
+      excluse: /node_modules/,
+      use: {
+        loader: 'babel-loader',
+        options: {
+          presets: ["@babel/preset-env", "@babel/preset-react"]
+        }
+      }
+    }
+  ]
+
+};
