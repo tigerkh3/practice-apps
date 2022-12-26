@@ -62,3 +62,15 @@ main {
 h1 {
   text-align: center;
 }
+
+#add {
+  text-align: center;
+}
+
+#term {
+  margin-right: 5px;
+}
+
+#def {
+  margin-right: 5px;
+}
