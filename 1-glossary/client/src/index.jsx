@@ -1,16 +1,29 @@
 // import React here, v17 so we can use ReactDOM
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import Add from './components/Add.jsx'
 import Table from './components/Table.jsx'
-
 
 function App() {
 
   const [term, newTerm] = useState('')
   const [definition, newDef] = useState('')
   const [glossary, updateGloss] = useState([])
+
+  // component did mount
+  // make a post request immediately to server
+  useEffect( () => {
+    fetch('http://localhost:3000', {method: 'POST', headers: {'Content-Type': 'application/json'}})
+      .then ( (response) => {
+        response.json()
+          .then( (result) => {
+            console.log(result);
+            updateGloss(result);
+          })
+      })
+    }
+  )
 
   // handles our key term input and creates a state for it
   function handleTermChange (e) {
@@ -56,7 +69,7 @@ function App() {
 
   return ([
     <Add term={term} def={definition} termChange={handleTermChange} defChange={handleDefinitionChange} click={onClick}/>,
-    <Table id='display' glossary={glossary}/>
+    <Table glossary={glossary}/>
   ])
 }
 

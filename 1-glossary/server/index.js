@@ -30,36 +30,43 @@ app.post('/', (req, res) => {
 
   // now we can make our database call and add to it
   // database call goes here
+  // we should probably check to see if it already exists or not
 
-  var test = new model({
-    term: keyTerm,
-    definition: def
-  });
-  // save our new term/definition to our database!
-  test.save()
-    .then( () => {
-      // after we save it we should send the total glossary back
-
-      // mongoose db.terms.find()
-      model.find()
-      .then ((result) => {
+  // initial render
+  if (!req.body.term) {
+    model.find()
+      .then ( (result) => {
         res.send(result);
       })
-    })
+  } else {
+    var test = new model({
+      term: keyTerm,
+      definition: def
+    });
+    // save our new term/definition to our database!
+    test.save()
+      .then( () => {
+        // after we save it we should send the total glossary back
+
+        // mongoose db.terms.find()
+        model.find()
+        .then ((result) => {
+          res.send(result);
+        })
+      })
+    }
 })
 
-
-
-
-
-
-
+const test = function () {
+  model.find()
+    .then ( (result) => {
+      return result;
+    })
+}
 
 // listening on port
 app.listen(port, () => {
   console.log(`app listening on port ${port}`)
 });
 
-
-
-// routing methods can go here
+module.exports = test;
