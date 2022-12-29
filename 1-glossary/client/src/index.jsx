@@ -18,12 +18,18 @@ function App() {
       .then ( (response) => {
         response.json()
           .then( (result) => {
-            console.log(result);
             updateGloss(result);
           })
       })
     }
   )
+
+  // handles our edit function
+  function onEdit (e) {
+    e.preventDefault()
+
+    console.log(e.target.key)
+  }
 
   // handles our key term input and creates a state for it
   function handleTermChange (e) {
@@ -69,7 +75,7 @@ function App() {
 
   return ([
     <Add term={term} def={definition} termChange={handleTermChange} defChange={handleDefinitionChange} click={onClick}/>,
-    <Table glossary={glossary}/>
+    <Table glossary={glossary} edit={onEdit}/>
   ])
 }
 

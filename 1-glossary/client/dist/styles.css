@@ -78,7 +78,7 @@ h1 {
 
 #display {
   text-align: center;
-  margin-left: 200px;
+  margin-left: 167px;
 }
 
 table,
@@ -90,4 +90,17 @@ thead,
 tfoot {
     background-color: #333;
     color: #fff;
+}
+
+#edit {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.term {
+  margin-right: 5px;
+}
+
+.def {
+  margin-right: 5px;
 }
