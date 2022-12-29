@@ -10,6 +10,9 @@ function App() {
   const [term, newTerm] = useState('')
   const [definition, newDef] = useState('')
   const [glossary, updateGloss] = useState([])
+  const [pendingChangeID, newPendingChangeID] = useState('')
+  const [showForm, setShowForm] = useState(false);
+  const [showAddForm, setAddForm] = useState(true);
 
   // component did mount
   // make a post request immediately to server
@@ -24,11 +27,47 @@ function App() {
     }
   )
 
+  const show = (e) => {
+
+    // e.target.value gives us an array of the key term / def we currently are using
+    newPendingChangeID(e.target.value);
+    // update the state of our termstochange so we can use it in the onEdit function
+    setShowForm(true);
+    setAddForm(false);
+
+  }
+
   // handles our edit function
-  function onEdit (e) {
+  function submitChange (e) {
     e.preventDefault()
 
-    console.log(e.target.key)
+    // we should make a request to our server to then access our database
+    var data = {
+      id: pendingChangeID,
+      newTerm: term,
+      newDef: definition
+    }
+
+    var options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    }
+
+    // call to server
+    fetch('http://localhost:3000/change', options)
+      .then ( (response) => {
+        response.json()
+          .then ( (result) => {
+            setShowForm(false)
+            setAddForm(true);
+            newTerm('')
+            newDef('');
+          })
+      })
+
   }
 
   // handles our key term input and creates a state for it
@@ -74,8 +113,8 @@ function App() {
   }
 
   return ([
-    <Add term={term} def={definition} termChange={handleTermChange} defChange={handleDefinitionChange} click={onClick}/>,
-    <Table glossary={glossary} edit={onEdit}/>
+    <Add term={term} def={definition} termChange={handleTermChange} defChange={handleDefinitionChange} click={onClick} show={showAddForm}/>,
+    <Table term={term} def={definition}show={show} showForm={showForm} glossary={glossary} edit={submitChange} termChange={handleTermChange} defChange={handleDefinitionChange}/>
   ])
 }
 

@@ -4,18 +4,12 @@ import { useState } from 'react';
 // this will generate a list of all our terms and definitions
 function Table (props) {
 
-  const [showForm, setShowForm] = useState(false);
-
-  const show = () => {
-    setShowForm(!showForm);
-  }
-
     var tableValues = props.glossary.map( (currAddition) =>{
         return ([
           <tr>
-            <td><button onClick={show}> Edit </button> </td>
-            <td className='term'>{currAddition.term}</td>
-            <td className='definition'>{currAddition.definition}</td>
+            <td><button value={currAddition._id} onClick={props.show}> Edit </button> </td>
+            <td  className='term'>{currAddition.term}</td>
+            <td  className='definition'>{currAddition.definition}</td>
           </tr>
         ])
       }
@@ -25,11 +19,11 @@ function Table (props) {
   return ([
     // our pop up form here
     <div id='edit'>
-      {showForm && (
+      {props.showForm && (
         <form>
-          <input className='term' placeholder='Edit Term'></input>
-          <input className='def' placeholder='Edit Definition'></input>
-          <button> Submit Change </button>
+          <input value={props.term} className='term' placeholder='Edit Term' onChange={props.termChange}></input>
+          <input value={props.def} className='def' placeholder='Edit Definition' onChange={props.defChange}></input>
+          <button type='button' onClick={props.edit}> Submit Change </button>
         </form>
       )}
     </div>,

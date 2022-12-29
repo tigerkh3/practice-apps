@@ -21,6 +21,43 @@ app.get('/', (req, res) => {
 
 // here we have middleware functions to help with post request
 
+//post request to change the term/definition
+app.post('/change', (req, res) => {
+
+  var filter = {_id: req.body.id };
+  var newTerm = req.body.newTerm;
+  var newDef = req.body.newDef;
+
+  if (newTerm && newDef) {
+    var update = {
+      term: newTerm,
+      definition: newDef
+    }
+  } else if (!newTerm) {
+    var update = {
+      definition: newDef
+    }
+  } else if (!newDef) {
+    var update = {
+      term: newTerm
+    }
+  }
+
+  // make our database call here
+  if (!update.term && !update.definition) {
+    res.status(404)
+  } else {
+  model.findByIdAndUpdate(filter, update)
+    .then( () => {
+      model.find()
+        .then( (result) => {
+          res.send(result);
+        })
+    })
+  }
+})
+
+// post request to add a new word to the database
 app.post('/', (req, res) => {
   // our req.body gives us our data object
   // req.body.term is our term
@@ -57,16 +94,8 @@ app.post('/', (req, res) => {
     }
 })
 
-const test = function () {
-  model.find()
-    .then ( (result) => {
-      return result;
-    })
-}
 
 // listening on port
 app.listen(port, () => {
   console.log(`app listening on port ${port}`)
 });
-
-module.exports = test;
