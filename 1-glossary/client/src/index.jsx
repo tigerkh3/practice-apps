@@ -37,6 +37,32 @@ function App() {
 
   }
 
+  function deleteRecord (e) {
+    e.preventDefault()
+
+    var id = e.target.value;
+
+    var data = {
+      id: id
+    }
+
+    var options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    }
+
+    fetch('http://localhost:3000/delete', options)
+      .then ( (result) => {
+        result.json()
+          .then ( (result) => {
+            updateGloss(result);
+          })
+      })
+  }
+
   // handles our edit function
   function submitChange (e) {
     e.preventDefault()
@@ -114,7 +140,7 @@ function App() {
 
   return ([
     <Add term={term} def={definition} termChange={handleTermChange} defChange={handleDefinitionChange} click={onClick} show={showAddForm}/>,
-    <Table term={term} def={definition}show={show} showForm={showForm} glossary={glossary} edit={submitChange} termChange={handleTermChange} defChange={handleDefinitionChange}/>
+    <Table term={term} def={definition}show={show} showForm={showForm} glossary={glossary} edit={submitChange} termChange={handleTermChange} defChange={handleDefinitionChange} delete={deleteRecord}/>
   ])
 }
 

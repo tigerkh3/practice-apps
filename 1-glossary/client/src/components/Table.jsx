@@ -7,7 +7,8 @@ function Table (props) {
     var tableValues = props.glossary.map( (currAddition) =>{
         return ([
           <tr>
-            <td><button value={currAddition._id} onClick={props.show}> Edit </button> </td>
+            <td><button type='button' value={currAddition._id} onClick={props.show}> Edit </button> </td>
+            <td><button type='button' value={currAddition._id} onClick={props.delete}> Delete </button></td>
             <td  className='term'>{currAddition.term}</td>
             <td  className='definition'>{currAddition.definition}</td>
           </tr>

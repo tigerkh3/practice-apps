@@ -7,7 +7,7 @@ const port = 3000;
 var bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json());
-
+const mongoose = require('mongoose');
 // models
 const model = require('./db')
 // set up static file usage for app home page
@@ -20,6 +20,20 @@ app.get('/', (req, res) => {
 
 
 // here we have middleware functions to help with post request
+
+app.post('/delete', (req, res) => {
+  var id = req.body.id;
+  id = mongoose.Types.ObjectId(id)
+
+  // database call to delete the record
+  model.deleteOne({_id: id})
+    .then ( () => {
+      model.find()
+        .then ( (result) => {
+          res.send(result);
+        })
+    } )
+})
 
 //post request to change the term/definition
 app.post('/change', (req, res) => {
