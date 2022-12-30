@@ -14,10 +14,12 @@ function Add (props) {
       )}
     </div>,
     <div>
+    {props.show && (
       <form className='search'>
         <input value={props.searchTerm} type='text' className='searchField' placeholder="search" onChange={props.searchInput}></input>
         <button type='button' onClick={props.search}> Search </button>
       </form>
+    )}
     </div>
   ])
 

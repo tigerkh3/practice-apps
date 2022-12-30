@@ -115,6 +115,11 @@ function App() {
           })
       })
 
+    if (!term && !definition) {
+      setShowForm(false)
+      setAddForm(true)
+    }
+
   }
 
   // handles our key term input and creates a state for it
