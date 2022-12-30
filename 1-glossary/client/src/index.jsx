@@ -9,6 +9,7 @@ function App() {
 
   const [term, newTerm] = useState('')
   const [definition, newDef] = useState('')
+  const [searchTerm, newSearch] = useState('');
   const [glossary, updateGloss] = useState([])
   const [pendingChangeID, newPendingChangeID] = useState('')
   const [showForm, setShowForm] = useState(false);
@@ -21,20 +22,40 @@ function App() {
       .then ( (response) => {
         response.json()
           .then( (result) => {
+            if (!searchTerm) {
             updateGloss(result);
+          }
           })
       })
     }
   )
 
   const show = (e) => {
-
+    e.preventDefault();
     // e.target.value gives us an array of the key term / def we currently are using
     newPendingChangeID(e.target.value);
     // update the state of our termstochange so we can use it in the onEdit function
     setShowForm(true);
     setAddForm(false);
 
+  }
+
+  function searchInput (e) {
+    e.preventDefault();
+    newSearch(e.target.value)
+  }
+
+  function searchRecord (e) {
+    e.preventDefault();
+    fetch('http://localhost:3000/search', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({term: searchTerm})})
+      .then ( (response) => {
+        response.json()
+          .then( (result) => {
+            console.log('what is this', result);
+            updateGloss(result);
+            console.log('should be one record', glossary)
+          })
+      })
   }
 
   function deleteRecord (e) {
@@ -139,7 +160,7 @@ function App() {
   }
 
   return ([
-    <Add term={term} def={definition} termChange={handleTermChange} defChange={handleDefinitionChange} click={onClick} show={showAddForm}/>,
+    <Add searchTerm={searchTerm} term={term} def={definition} termChange={handleTermChange} defChange={handleDefinitionChange} click={onClick} show={showAddForm} searchInput={searchInput} search={searchRecord}/>,
     <Table term={term} def={definition}show={show} showForm={showForm} glossary={glossary} edit={submitChange} termChange={handleTermChange} defChange={handleDefinitionChange} delete={deleteRecord}/>
   ])
 }

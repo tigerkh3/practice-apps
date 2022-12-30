@@ -57,6 +57,7 @@ main {
   max-width: 840px;
   padding: 16px;
   margin: auto;
+  text-align: center;
 }
 
 h1 {
@@ -102,5 +103,13 @@ tfoot {
 }
 
 .def {
+  margin-right: 5px;
+}
+
+.search {
+  margin-top: 5px;
+}
+
+.searchField {
   margin-right: 5px;
 }

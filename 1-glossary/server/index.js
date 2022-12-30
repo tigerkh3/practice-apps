@@ -21,6 +21,16 @@ app.get('/', (req, res) => {
 
 // here we have middleware functions to help with post request
 
+app.post('/search', (req, res) => {
+  var searchTerm = req.body.term
+
+  // search our databse for the term
+  model.find({term: searchTerm})
+    .then ( (result) => {
+      res.send(result);
+    })
+})
+
 app.post('/delete', (req, res) => {
   var id = req.body.id;
   id = mongoose.Types.ObjectId(id)
