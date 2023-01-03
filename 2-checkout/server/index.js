@@ -9,6 +9,7 @@ const db = require("./db");
 
 const app = express();
 
+
 // Adds `req.session_id` based on the incoming cookie value.
 // Generates a new session if one does not exist.
 app.use(sessionHandler);
@@ -19,12 +20,12 @@ app.use(logger);
 // Serves up all static and generated assets in ../client/dist.
 app.use(express.static(path.join(__dirname, "../client/dist")));
 
-/**** 
- * 
- * 
+/****
+ *
+ *
  * Other routes here....
  *
- * 
+ *
  */
 
 app.listen(process.env.PORT);
