@@ -58,21 +58,35 @@ main {
   padding: 16px;
   margin: auto;
 }
+
+form {
+  margin-bottom: 20px;
+}
+
 #form1 {
-  margin-bottom: 100px;
-  margin-top: 70px;
+  margin-top: 30px;
 }
 
 #form2 {
-  margin-bottom: 100px;
+  margin-top: 30px;
 }
 
 #form3 {
-  margin-top: 70px;
+  margin-top: 30px;
 }
 
 .field {
   margin-top: 10px;
   margin-right: 10px;
   margin-bottom: 10px;
+}
+
+.statement {
+  margin-bottom: 25px;
+}
+
+.error {
+  margin-top: 15px;
+  color: red;
+  text-transform: capitalize;
 }
