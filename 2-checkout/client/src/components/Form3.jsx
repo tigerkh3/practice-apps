@@ -30,7 +30,7 @@ function Form3 (props) {
             <input className='field' type='text' placeholder='Billing Zip Code'></input>
           </div>
         </form>
-        <button value='purchase' onClick={props.next}> Purchase </button>
+        <button value='confirmation' onClick={props.next}> Next </button>
       </div>
     ])
   } else {

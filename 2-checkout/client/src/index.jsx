@@ -1,9 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { useState, useEffect } from 'react';
-import Form1 from './components/Form1.jsx'
-import Form2 from './components/Form2.jsx'
-import Form3 from './components/Form3.jsx'
+import Form1 from './components/Form1.jsx';
+import Form2 from './components/Form2.jsx';
+import Form3 from './components/Form3.jsx';
+import Confirmation from './components/Confirmation.jsx';
 import { Promise } from 'bluebird';
 
 // create our app component here
@@ -15,6 +16,7 @@ function App () {
   const [form1View, setForm1View] = useState(false);
   const [form2View, setForm2View] = useState(false);
   const [form3View, setForm3View] = useState(false);
+  const [confirmation, showConfirmation] = useState(false);
 
   // state for all fields being filled
   const [fieldsFilled, setFieldsFilled] = useState(true);
@@ -23,12 +25,27 @@ function App () {
   const [form2, setForm2] = useState([]);
   const [form3, setForm3] = useState([]);
 
-  // useeffect so form3 updates properly on purchase update properly
+  // useEffect here for form 3 on change
   useEffect( () => {
-    // we would have our server call happen somehwere here maybe..
-    // probably use an if statement so it does fire on app start up
-    // aka only when our form 3 information is filled out.
+    // handle inital app start up, no fetch
+    if (form3.length) {
+      // fire off fetch request to send all data to server here
+      var data = {
+        form1: form1,
+        form2: form2,
+        form3: form3,
+        cookie: document.cookie,
+      }
+      var options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data),
+      }
 
+      fetch('http://localhost:3000/confirmation', options)
+    }
   }, [form3])
 
   // event handler methods
@@ -39,7 +56,7 @@ function App () {
     e.preventDefault();
     // we want this function to work with all forms to make it easier
     // if the event target value is form1
-    if (e.target.value === 'form1' && form2View === false && form3View === false) {
+    if (e.target.value === 'form1' && form2View === false && form3View === false && confirmation === false) {
       // first show shows up
       setForm1View(true);
     } else if (e.target.value === 'form2' && form3View === false) {
@@ -65,23 +82,26 @@ function App () {
       } else {
         setFieldsFilled(false);
       }
-    }
-  }
-    // form 3 purchase function that sends all data to our server
-    function purchase (e) {
-      e.preventDefault();
-
-      // we want to first update form3s array of values here
-      // run our helper
+    } else if (e.target.value === 'confirmation') {
       var inputs = fieldValues();
       if (inputs.length === 4) {
-        setForm3(inputs)
+        setForm3(inputs);
         setFieldsFilled(true);
         setForm3View(false);
+        showConfirmation(true);
       } else {
         setFieldsFilled(false);
       }
     }
+  }
+
+  // form 3 purchase function that sends all data to our server
+  function purchase (e) {
+    e.preventDefault();
+
+
+
+  }
 
   // create helper function for grabbing input field values
   function fieldValues () {
@@ -108,7 +128,8 @@ function App () {
     <button value='form1' type='button' onClick={viewForm}> Checkout! </button>
     <Form1 fields={fieldsFilled} next={viewForm} view={form1View}/>
     <Form2 fields={fieldsFilled} next={viewForm} view={form2View}/>
-    <Form3 fields={fieldsFilled} next={purchase} view={form3View}/>
+    <Form3 fields={fieldsFilled} next={viewForm} view={form3View}/>
+    <Confirmation fields={fieldsFilled} view={confirmation} next={purchase}/>
   </div>
   ])
 }
