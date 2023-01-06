@@ -24,6 +24,10 @@ function App () {
   const [form1, setForm1] = useState([]);
   const [form2, setForm2] = useState([]);
   const [form3, setForm3] = useState([]);
+  const [allFormInfo, setFormInfo] = useState([]);
+
+  // state for new user
+  const [newUser, isNewUser] = useState(true);
 
   // useEffect here for form 3 on change
   useEffect( () => {
@@ -45,8 +49,42 @@ function App () {
       }
 
       fetch('http://localhost:3000/confirmation', options)
+        . then ( (response) => {
+          response.json()
+            .then ( (result) => {
+              // this holds our array that we can update the state of our purchase info
+              console.log('should be an array with nice values', result);
+              setFormInfo(result);
+            })
+        })
+    } else {
+
+      var data = {
+        cookie: document.cookie,
+      }
+
+      // on app start up useEffect runs, we can add our cookie checker here
+      // make a call to our server to handle database query
+      var options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data),
+      }
+
+      // fetch here
+      fetch('http://localhost:3000/checkUser', options)
+        .then ( (response) => {
+          response.json()
+            .then ( (result) => {
+              if (result) {
+                isNewUser(false);
+              }
+            })
+        })
     }
-  }, [form3])
+  }, [form3, confirmation])
 
   // event handler methods
     // form view function for forms 1 and 2, this handles the form visbility and also collects information
@@ -97,10 +135,7 @@ function App () {
 
   // form 3 purchase function that sends all data to our server
   function purchase (e) {
-    e.preventDefault();
-
-
-
+    showConfirmation(false);
   }
 
   // create helper function for grabbing input field values
@@ -126,10 +161,10 @@ function App () {
   </div>,
   <div>
     <button value='form1' type='button' onClick={viewForm}> Checkout! </button>
-    <Form1 fields={fieldsFilled} next={viewForm} view={form1View}/>
+    <Form1 fields={fieldsFilled} next={viewForm} view={form1View} user={newUser}/>
     <Form2 fields={fieldsFilled} next={viewForm} view={form2View}/>
     <Form3 fields={fieldsFilled} next={viewForm} view={form3View}/>
-    <Confirmation fields={fieldsFilled} view={confirmation} next={purchase}/>
+    <Confirmation fields={fieldsFilled} view={confirmation} next={purchase} formInfo={allFormInfo}/>
   </div>
   ])
 }

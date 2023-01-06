@@ -43,8 +43,36 @@ app.post('/confirmation', (req, res) => {
   var address = info.form2[0] + ', ' + info.form2[1] + ', ' + info.form2[2] + ' ' + info.form2[3]
   // we can probably store our data here
   // database request here to input all the information into the database
-  db.query(`INSERT INTO responses (cookie, name, email, password, address, phone, card, expiration, CCV, zipcode) VALUES ('${info.cookie}', '${info.form1[0]}', '${info.form1[1]}', '${info.form1[2]}', '${address}', '${info.form2[4]}', '${info.form3[0]}', '${info.form3[1]}', '${info.form3[2]}', '${info.form3[3]}')`
-  )
+  db.queryAsync(`INSERT INTO responses (cookie, name, email, password, address, phone, card, expiration, CCV, zipcode) VALUES ('${info.cookie}', '${info.form1[0]}', '${info.form1[1]}', '${info.form1[2]}', '${address}', '${info.form2[4]}', '${info.form3[0]}', '${info.form3[1]}', '${info.form3[2]}', '${info.form3[3]}')`)
+    .then ( () => {
+      db.queryAsync(`SELECT * from responses having cookie = '${info.cookie}'`)
+        .then ( (result) => {
+          // result [0] is an array holding our object that has all our information
+          var data = [];
+          // since its an object we can manipulate the data first from an object into an array
+          for (var key in result[0][0]) {
+            if (key !== 'id' && key !== 'cookie') {
+              data.push(key + ': ' + result[0][0][key])
+            }
+          }
+          res.send(JSON.stringify(data));
+        })
+    })
+})
+
+app.post('/checkUser', (req, res) => {
+
+  // req.body.cookie is our cookie
+  // make db query to select from responses with cookie and document.cookie
+  db.queryAsync(`SELECT cookie FROM responses group by cookie having cookie = '${req.body.cookie}'`)
+    .then ( (result) => {
+      // result[0] gives us an array of the searched results
+      if (result[0].length) {
+        res.send(JSON.stringify(true))
+      } else {
+        res.send(JSON.stringify(false))
+      }
+    })
 })
 
 app.listen(process.env.PORT);

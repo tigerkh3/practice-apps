@@ -90,3 +90,7 @@ form {
   color: red;
   text-transform: capitalize;
 }
+
+#purchase {
+  margin-top: 30px;
+}

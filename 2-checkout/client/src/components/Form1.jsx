@@ -1,7 +1,7 @@
 import React from 'react'
 
 function Form1 (props) {
-  if (props.view) {
+  if (props.view && props.user) {
     return ([
       <div className='error'>
         {!props.fields && (
@@ -29,6 +29,10 @@ function Form1 (props) {
         <button value='form2' onClick={props.next}> Next </button>
       </div>
     ])
+  } else if (props.view && !props.user) {
+      return (
+        <div className='error'> USER ALREADY EXISTS IN OUR DATABASE ! </div>
+      )
   } else {
     return null;
   }
